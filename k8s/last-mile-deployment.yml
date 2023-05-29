@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: last-mile
+  namespace: logistics
+spec:
+  selector:
+    matchLabels:
+      app: last-mile
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: last-mile
+    spec:
+      containers:
+        - name: last-mile
+          image: logistics/last-mile
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8082
+              name: last-mile-port
+          env:
+            - name: NODE_ENV
+              value: dev
+          livenessProbe:
+            httpGet:
+              path: /lastmile
+              port: last-mile-port
+            initialDelaySeconds: 15
+            timeoutSeconds: 30
+            periodSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /lastmile
+              port: last-mile-port
+            initialDelaySeconds: 15
+            timeoutSeconds: 30
+            periodSeconds: 5
+            successThreshold: 2
+            failureThreshold: 3

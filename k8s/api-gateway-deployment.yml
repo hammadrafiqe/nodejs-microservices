@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway
+  namespace: logistics
+spec:
+  selector:
+    matchLabels:
+      app: api-gateway
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: api-gateway
+    spec:
+      containers:
+        - name: api-gateway
+          image: logistics/api-gateway
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+              name: gateway-port
+          env:
+            - name: NODE_ENV
+              value: dev
+            - name: api_service_name
+              valueFrom:
+                configMapKeyRef:
+                  name: logistics-ingress-config-map
+                  key: api_service_name
+            - name: last_mile_service_name
+              valueFrom:
+                configMapKeyRef:
+                  name: logistics-ingress-config-map
+                  key: last_mile_service_name
+          livenessProbe:
+            httpGet:
+              path: /
+              port: gateway-port
+            initialDelaySeconds: 15
+            timeoutSeconds: 30
+            successThreshold: 1
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /
+              port: gateway-port
+            initialDelaySeconds: 15
+            timeoutSeconds: 30
+            periodSeconds: 5
+            successThreshold: 2
+            failureThreshold: 3
