@@ -2,12 +2,17 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: api-gateway
-  namespace: logistics
+  namespace: autoscaller
 spec:
   selector:
     matchLabels:
       app: api-gateway
   replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
   template:
     metadata:
       labels:
@@ -50,3 +55,10 @@ spec:
             periodSeconds: 5
             successThreshold: 2
             failureThreshold: 3
+          resources:
+            limits:
+              cpu: "200m"
+              memory: "500Mi"
+            requests:
+              cpu: "40m"
+              memory: "100Mi"

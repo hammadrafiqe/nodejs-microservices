@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: logistics-ingress-config-map
-  namespace: logistics
+  namespace: autoscaller
 data:
   last_mile_service_name: last_mile
   api_service_name: api

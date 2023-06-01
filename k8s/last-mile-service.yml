@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: last-mile
-  namespace: logistics
+  namespace: autoscaller
 spec:
   selector:
     app: last-mile

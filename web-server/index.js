@@ -52,6 +52,15 @@ app.use("/lastmile", async (req, res) => {
   }
 });
 
+app.get("/put/load", (req, res) => {
+  let count = 0;
+  console.log("putting load");
+  for (let i = 0; i < 1000000; i++) {
+    count += i;
+  }
+  res.status(200).send("" + count);
+});
+
 app.listen(8080, () => {
   console.log("api gateway started successfully at port 8080");
 });
